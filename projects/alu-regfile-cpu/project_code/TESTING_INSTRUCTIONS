@@ -1,0 +1,11 @@
+TESTING INSTRUCTIONS:
+
+To test your CPU, run "make cpu"
+This will dump a logfile called 'TEST_LOG' in the current directory. To view the 
+content, run "cat TEST_LOG". It's a good idea to zoom out in your terminal since 
+the lines in log are long.
+
+To test your ALU with registered funct, run "make alu"
+This will also dump a logfile as above.
+
+Logfiles are overwritten every time you run a test.

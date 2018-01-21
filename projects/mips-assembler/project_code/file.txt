@@ -1,0 +1,2 @@
+slt, $at, $rs, $rt
+bne, $at, $0, Label

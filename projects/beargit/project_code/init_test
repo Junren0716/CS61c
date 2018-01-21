@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if [ ! -f "beargit.c" ]; then
+  echo "ERROR: Need to run "source init_test" from your source directory"
+  return
+fi
+
+if [ -d "test" ]; then
+  if [ -f "test/.BEARGIT_TEST_IGNORE_ME" ]; then
+    rm -rf test
+  else
+    echo "ERROR: A test directory already exists, but it was not created by make. Please manually delete or move this directory and try again."
+    return
+  fi
+fi
+
+make beargit
+
+mkdir test
+touch test/.BEARGIT_TEST_IGNORE_ME
+
+if [[ ! "$PATH" =~ "$PWD" ]]; then
+  export PATH=$PWD:$PATH
+fi
+
+cd test
+echo
+echo  '*** WELCOME TO YOUR BEARGIT TEST DIRECTORY ***'
+echo
+echo 'You are now in the test directory, which is a brand-new directory created for'
+echo 'you to test out your beargit implementation. Your source directory has also'
+echo 'been added to the PATH, so you can just type commands such as "beargit init" to'
+echo 'try out your implementation.'
+echo
+echo 'To get back to your source code, just go one directory up. You can delete this'
+echo 'directory and create a new one anytime by typing "source init_test" again from'
+echo 'your source directory.'
+echo
+echo 'Hint: You may want to use the "touch <filename>" command to generate files for'
+echo 'testing. This will create an empty file with a certain name.'
+echo

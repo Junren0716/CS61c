@@ -1,0 +1,408 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CS61C Su15: Project 4</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+
+      code {
+        font-size: 80%;
+      }
+
+      .catrow {
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+
+      .catpic {
+        width: 80px;
+        height:80px;
+        display: block;
+        margin: auto
+      }
+
+      .nocat {
+        opacity:0.1;
+      }
+
+    </style>
+
+    <!-- Custom styles for this template -->
+    <!--<link href="theme.css" rel="stylesheet">-->
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body role="document">
+
+    <div class="container theme-showcase" role="main">
+
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron" style="margin-top: 16px">
+        <h1>Convolutional Neural <span style="color:red">Cat</span>works</h1>
+        <p>Welcome to your CS61C Project 4! In this assignment, you will classify images using a Convolutional Neural Network (CNN). The task is simple: You will be given a large number of 32x32 images and have to find out whether or not each of them contains a cat.
+      </div>
+
+      <div class="page-header">
+        <h1>Image Classification</h1>
+      </div>
+
+      <div class="row">
+      <div class="col-md-3"><img class="pull-left img-thumbnail" src="cats.jpg" style="width: 300px"></div>
+      <div class="col-md-9"><p>By being shown this page, you have successfully launched the <i>interactive</i> mode of your <i>Convolutional Neural Catwork (CNC) app</i> (patent pending :D). This page allows you to test your implementation by selecting a number of random images from a database, and letting your classifier determine which of them contain cats and which don't. First, pick the number of images you want to classify and press the "Load Random Images" button. Once the images have been loaded, press the "Meow!" button to find all the cats.
+      </p>
+      <p>This page uses your CNN implementation in the background. We give you a correct but slow implementation as a starting point. Your job is to make it faster!</p>
+      </div>
+      </div>
+
+      <hr>
+      <div class="row">
+      <div class="col-md-6">
+      <form class="form-inline">
+        <div class="form-group has-success has-feedback" id="imageCountBox">
+          <label class="control-label" for="inputImageCount">Number of images:&nbsp;</label>
+          <input type="text" value="120" class="form-control" id="inputImageCount" style="width: 180px" aria-describedby="inputImageCountStatus">
+          <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+          <span id="inputImageCountStatus" class="sr-only">(success)</span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="loadButton">Load Random Images</button>
+        <button type="submit" class="btn btn-warning" id="startButton" disabled=true>Meow!</button>
+      </form>
+      </div>
+ 
+      <div class="col-md-6" style="vertical-align: middle; height: 34px">
+      <div class="progress" style="vertical-align: middle; height: 34px">
+        <div class="progress-bar" id="loadProgress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+      </div>
+      </div></div>
+
+      <hr>
+
+      <div class="page-header">
+        <h1>Classification Results</h1>
+      </div>
+
+      <h3>Performance</h3>
+
+      <p>Here are some results to measure the performance of your CNN. We measure both the accuracy (i.e., how many pictures were classified correctly) and the performance (i.e., how long did each picture take). Your goal is to classify as many picture as possible per second, without reducing the accuracy of classification.</p>
+
+      <h4 class="progress-label">Classification Speed (this will determine your grade)</h4>
+      <div class="progress" style="vertical-align: middle; height: 34px">
+        <div class="progress-bar progress-bar-danger" id="speedBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"><div id="speedText" style="line-height: 34px;"></div></div>
+      </div>
+
+      <h4 class="progress-label">Classification Accuracy (should be around 90-95%)</h4>
+      <div class="progress" style="vertical-align: middle; height: 34px">
+        <div class="progress-bar progress-bar-success" id="accBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"><div id="accText" style="line-height: 34px;"></div></div>
+      </div>
+
+      <h3>Image Dataset</h3>
+      <p>Here you will find the results of running your CNN on the selected images. With a perfect CNN, you should only see cat pictures, but since CNNs do not always give perfect results, some images will be misclassified. Can you tell what might have made the CNN think that a picture is a cat even though it isn't?</p>
+
+      <div id="catdata">
+        <p align="center" style="margin-top: 20px; margin-bottom: 20px"><b>No images loaded yet!</b></p>
+      </div>
+
+    </div> <!-- /container -->
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Credits to: Martin Maas. This project is based on <a href="https://twitter.com/karpathy">Andrej Karpathy</a>'s fantastic <a href="http://cs.stanford.edu/people/karpathy/convnetjs/">convnetjs</a> implementation. For image attribution, click <a href="http://www.flickr.com/photos/grovesa16/12139669665/">here</a>.</p>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/docs.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="js/convnetjs/convnet-min.js"></script>
+    <script src="js/convnetjs/util.js"></script>
+    <script src="js/convnetjs/vis.js"></script>
+
+    <script src="cifar10/cifar10_labels.js"></script>
+
+    <script>
+var base_url = document.URL;
+var classes_txt = ['airplane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck'];
+
+var num_batches = 1;
+var num_samples = 120;
+var data_img_elts = new Array(num_batches);
+var img_data = new Array(num_batches);
+var loaded = new Array(num_batches);
+var loaded_train_batches = [];
+
+var current_samples = [];
+
+var maxmin = cnnutil.maxmin;
+var f2t = cnnutil.f2t;
+
+var load_data_batch = function(batch_num) {
+  // Load the dataset with JS in background
+  data_img_elts[batch_num] = new Image();
+  var data_img_elt = data_img_elts[batch_num];
+  data_img_elt.onload = function() { 
+    var data_canvas = document.createElement('canvas');
+    data_canvas.width = data_img_elt.width;
+    data_canvas.height = data_img_elt.height;
+    var data_ctx = data_canvas.getContext("2d");
+    data_ctx.drawImage(data_img_elt, 0, 0); // copy it over... bit wasteful :(
+    img_data[batch_num] = data_ctx.getImageData(0, 0, data_canvas.width, data_canvas.height);
+    loaded[batch_num] = true;
+    loaded_train_batches.push(batch_num);
+    sel = $("#loadProgress");
+    sel.width((100.0 * loaded_train_batches.length / num_batches) + '%');
+    console.log('finished loading data batch ' + batch_num);
+    setTimeout(load_batch, 10, batch_num+1);
+  };
+  data_img_elt.src = "cifar10/cifar10_batch_" + batch_num + ".png";
+}
+
+var sample_training_instance = function() {
+  // find an unloaded batch
+  var bi = Math.floor(Math.random()*num_batches);
+  if (!loaded[bi]) {
+    console.log("ERROR: Shouldn't happen.");
+  }
+  var b = loaded_train_batches[bi];
+  var k = Math.floor(Math.random()*1000); // sample within the batch
+  var n = b*1000+k;
+
+  current_samples.push(n);
+
+  // fetch the appropriate row of the training image and reshape into a Vol
+  var p = img_data[b].data;
+  var x = new convnetjs.Vol(32,32,3,0.0);
+  var W = 32*32;
+  var j=0;
+  for(var dc=0;dc<3;dc++) {
+    var i=0;
+    for(var xc=0;xc<32;xc++) {
+      for(var yc=0;yc<32;yc++) {
+        var ix = ((W * k) + i) * 4 + dc;
+        x.set(yc,xc,dc,p[ix]/255.0-0.5);
+        i++;
+      }
+    }
+  }
+  return {x:x, label:labels[n]};
+}
+
+var draw_activations_COLOR = function(elt, A, scale, grads) {
+  var s = scale || 2; // scale
+  var draw_grads = false;
+  if(typeof(grads) !== 'undefined') draw_grads = grads;
+  // get max and min activation to scale the maps automatically
+  var w = draw_grads ? A.dw : A.w;
+  var mm = maxmin(w);
+  var canv = document.createElement('canvas');
+  canv.className = 'actmap';
+  var W = A.sx * s;
+  var H = A.sy * s;
+  canv.width = W;
+  canv.height = H;
+  var ctx = canv.getContext('2d');
+  var g = ctx.createImageData(W, H);
+  for(var d=0;d<3;d++) {
+    for(var x=0;x<A.sx;x++) {
+      for(var y=0;y<A.sy;y++) {
+        if(draw_grads) {
+          var dval = Math.floor((A.get_grad(x,y,d)-mm.minv)/mm.dv*255);
+        } else {
+          var dval = Math.floor((A.get(x,y,d)-mm.minv)/mm.dv*255);  
+        }
+        for(var dx=0;dx<s;dx++) {
+          for(var dy=0;dy<s;dy++) {
+            var pp = ((W * (y*s+dy)) + (dx + x*s)) * 4;
+            g.data[pp + d] = dval;
+            if(d===0) g.data[pp+3] = 255; // alpha channel
+          }
+        }
+      }
+    }
+  }
+  ctx.putImageData(g, 0, 0);
+  elt.appendChild(canv);
+}
+
+var draw_sample = function(row) {
+    var sample = sample_training_instance();
+    var y = sample.label;  // ground truth label
+    var x = sample.x;
+
+    var div = document.createElement('div');
+    var outerDiv = document.createElement('div');
+    outerDiv.className = 'col-md-1';
+    div.id = 'cat' + current_samples.length;
+    
+    // draw the image into a canvas
+    draw_activations_COLOR(div, x, 2); // draw Vol into canv
+    $(div).prependTo($(outerDiv));
+    $(div).children().addClass('img-thumbnail');
+    $(outerDiv).appendTo(row);
+}
+
+var load_batch = function(i) {
+  if (i < num_batches) {
+    load_data_batch(i);
+  } else {
+    $("#catdata").empty();
+    current_samples = [];
+    for (var j = 0; j < Math.ceil(num_samples/12); j++) {
+      var rowDiv = document.createElement('div');
+      rowDiv.className="row catrow";
+      $(rowDiv).appendTo($("#catdata"));
+      for (var i = 0; (i < 12) && ((12*j+i) < num_samples); i++)  
+        draw_sample($(rowDiv));
+    }
+
+    $("#loadProgress").removeClass("progress-bar-warning");
+    $("#loadButton").prop("disabled",false);
+    $("#startButton").prop("disabled",false);
+    $("#inputImageCount").prop("disabled",false);
+  }
+}
+
+$("#inputImageCount").on('input', function() {
+  var newValue = parseInt($("#inputImageCount").val(), 10);
+  if (newValue > 0 && newValue < 50000) {
+    $("#imageCountBox").addClass('has-success');
+    $("#imageCountBox").removeClass('has-error');
+    $("#loadButton").prop("disabled",false);
+  } else {
+    $("#imageCountBox").removeClass('has-success');
+    $("#imageCountBox").addClass('has-error');
+    $("#loadButton").prop("disabled",true);
+  }
+});
+
+$("#loadButton").click(function() {
+  num_samples = parseInt($("#inputImageCount").val(), 10);
+  num_batches = Math.ceil(num_samples/1000);
+  console.log("Pressed load button");
+  $("#loadButton").prop("disabled",true);
+  $("#inputImageCount").prop("disabled",true);
+  setTimeout(load_batch, 10, 0);
+  return false;
+});
+
+$("#startButton").click(function() {
+  $("#loadButton").prop("disabled",true);
+  $("#startButton").prop("disabled",true);
+  $("#inputImageCount").prop("disabled",true);
+
+  $("#loadProgress").addClass("progress-bar-warning");
+  $("#loadProgress").addClass("progress-bar-striped");
+  $("#loadProgress").addClass("active");
+
+  $.post(base_url + "run", JSON.stringify(current_samples), function( data ) {
+    var resp = JSON.parse(data);
+    speed = 1000.0 * (num_samples / resp['dt']);
+    $("#speedBar").width((speed * 100.0 / 3000.0) + '%');
+    $("#speedText").text(Number(speed).toFixed(2) + " Cat/s");
+
+    var correct = 0;
+
+    var responses = resp['r']
+    for (var i = 0; i < responses.length; i++) {
+      mylabel = labels[current_samples[i]];
+      if (responses[i] == -1) {
+        $("#cat" + (i+1)).addClass("nocat");
+        if (mylabel != 3) correct++;
+      } else {
+        if (mylabel == 3) correct++;
+      }
+    }
+
+    $("#accBar").width((correct * 100.0 / num_samples) + '%');
+    $("#accText").text(Number(correct * 100.0 / num_samples).toFixed(2) + '%');
+
+    $("#loadProgress").removeClass("progress-bar-striped");
+    $("#loadProgress").removeClass("active");
+    $("#loadButton").prop("disabled",false);
+    $("#startButton").prop("disabled",false);
+    $("#inputImageCount").prop("disabled",false);
+  });
+  return false;
+});
+
+    </script>
+  </body>
+</html>
+

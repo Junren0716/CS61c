@@ -1,0 +1,17 @@
+.text
+1109ffff
+1509fffe
+08000000
+1509fffe
+0c000000
+1109fffa
+
+.symbol
+0	label1
+0	label2
+8	label3
+16	label4
+
+.relocation
+8	label2
+16	label1

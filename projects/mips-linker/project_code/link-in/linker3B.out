@@ -1,0 +1,14 @@
+.text
+000420c0
+0085082a
+14200002
+0c000000
+2442ffff
+03e00008
+
+.symbol
+0	func2
+20	done
+
+.relocation
+12	func3

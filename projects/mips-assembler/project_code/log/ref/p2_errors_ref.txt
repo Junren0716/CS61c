@@ -1,0 +1,6 @@
+Error - invalid instruction at line 1: addiu $t0 $t3 $t3
+Error - invalid instruction at line 2: jal
+Error - invalid instruction at line 3: ori $t2 $99 0xAB
+Error - invalid instruction at line 4: bne $t0 $t1 not_found
+Error - invalid instruction at line 5: addiu $t3 $t2 0x80808080
+One or more errors encountered during assembly operation.

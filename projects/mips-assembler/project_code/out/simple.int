@@ -1,0 +1,6 @@
+addu $a0 $a1 (null)
+or $a3 $t0 (null)
+jr (null)
+slt $t3 $s0 (null)
+sltu $s2 $s3 (null)
+sll $ra 3 (null)
