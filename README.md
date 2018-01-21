@@ -9,14 +9,14 @@ This repository contains all of my coursework from the CS61c Course at UC Berkel
 
 (2) **MIPS Assembler / Linker** - A two-part project that involved (a)writing an assembler that translates a subset of the MIPS instructure set to machine code and (b) implementing a linker that processes the machine code and generates an executable file -- 
 
-**Project 2.1:** *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/02/*
+*Project 2.1:* *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/02/*
 
-**Project 2.2:** *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/03/*
+*Project 2.2:* *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/03/*
 
 (3) **ALU / Regfile and CPU Design** - A two-part project where we used the Logisim application to implement a simple 32-bit two-cycle processor; the first part involved implementing the Regfile and ALU (which take in  the MIPS instruction opcodes and register numbers to execute calculations) and the second part involved completing the pipelined processor (dealing with jumps, stalling the pipelines when necessary, etc.) -- 
 
-**Project 3.1:** *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/04/*
+*Project 3.1:* *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/04/*
 
-**Project 3.2:** *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/05/*
+*Project 3.2:* *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/05/*
 
 (4) **Performance Optimization / Convolutional Neural Networks** - An application of performance optimizations techniques learn in class to speed up the proces of image classification using a CNN (focus was specifically on using unrolling, SIMD instructions, OpenMP parallelization, and other optimizations to improve the speed of the program) -- *http://www-inst.eecs.berkeley.edu/~cs61c/su15/projs/06/*
